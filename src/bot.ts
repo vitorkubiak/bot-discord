@@ -14,7 +14,10 @@ var apiyoutube: string | undefined = process.env.apiyoutube;
 var apiibm: string | undefined = process.env.apiibm;
 var urlapiibm: string | undefined = process.env.urlapiibm;
 var apicovid: string | undefined = process.env.apicovid;
+var assistantidibm: string | undefined = process.env.assistantidibm;
 
+var apiIbmSession: string | undefined;
+// https://api.us-east.assistant.watson.cloud.ibm.com
 let ready = true;
 let filaMusicas: string[] = [];
 let arrayMessages: Message[] = [];
@@ -33,6 +36,16 @@ bot.once('ready', () => {
         }),
         url: urlapiibm,
     });
+    assistant.createSession({
+        assistantId: (assistantidibm ? assistantidibm : "")
+      }) 
+        .then(res => {
+          console.log('Uma Session foi criada!', res.result.session_id)
+          apiIbmSession = res.result.session_id;
+        })
+        .catch(err => {
+          console.log(err);
+        });
 })
 
 async function handleYoutube(msg: Message, check = false): Promise<any> {
@@ -43,7 +56,7 @@ async function handleYoutube(msg: Message, check = false): Promise<any> {
 
     if (!ytdl.validateURL(link) && !arrayMessages.includes(msg) && 'next' !== link) {
 
-        const nomeVideo = splitYoutube.filter(palavra => palavra !== '!youtube');
+        const nomeVideo = splitYoutube.filter((palavra: string) => palavra !== '!youtube');
 
         const stringVideo = nomeVideo.join(" ");
 
@@ -82,6 +95,19 @@ async function handleYoutube(msg: Message, check = false): Promise<any> {
 
     if (link === "next") {
         filaMusicas.shift();
+        if(filaMusicas.length === 0){
+            if (msg.member?.voice.channel) {
+                if (msg.member?.voice.channel?.members.map(guildMember => guildMember.user.username === 'Botzera')) {
+                    const connection = msg.member.voice.channel;
+                    connection.join().then(connection => {
+                        ready = true
+                        arrayMessages = [];
+                        filaMusicas = [];
+                        connection.disconnect();
+                    })
+                }
+            }
+        }
         { arrayMessages.length > 1 && arrayMessages.shift() };
         ready = true;
         // handleNextMusic(msg);
@@ -309,22 +335,27 @@ bot.on('message', msg => {
         if (msg.channel.type === "dm") {
             if (msg.author.id === bot.user?.id) return;
             if (!assistant) return;
-            // assistant.message({
-            //     assistantId: assistant.,
-            //     sessionId: '{session_id}',
-            //     input: {
-            //         'message_type': 'text',
-            //         'text': 'Hello'
-            //     }
-            // })
-            //     .then(res => {
-            //         // console.log(JSON.stringify(res.result, null, 2));
-            //         msg.reply(JSON.stringify(res.result))
-            //     })
-            //     .catch(err => {
-            //         console.log(err);
-            //     });
-        }
+            if (!apiIbmSession) return;
+            // "1419de93-b881-4086-9480-00e6727304ef"
+            assistant.message({
+                assistantId: (assistantidibm ? assistantidibm : ""),
+                sessionId: apiIbmSession,
+                input: {
+                  message_type: 'text',
+                  text: msg.content,
+                  } 
+                })
+                .then(res => { 
+                  // console.log(JSON.stringify(res.result, null, 2));
+                  const responseArray = res.result?.output.generic || [];
+                  if (responseArray.length > 0) {
+                      msg.reply(responseArray[0].text);   
+                  }
+                }) 
+                .catch(err => { 
+                  console.log(err); 
+                }); 
+        }  
 
         if (msg.content === "!nao consigo") {
             msg.reply("Não desista gurizão, tenta de novo e meta ficha")
