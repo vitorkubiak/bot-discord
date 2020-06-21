@@ -40,7 +40,7 @@ bot.once('ready', () => {
         assistantId: (assistantidibm ? assistantidibm : "")
       }) 
         .then(res => {
-          console.log('Uma Session foi criada!', res.result.session_id)
+          console.log('Watson is alive!')
           apiIbmSession = res.result.session_id;
         })
         .catch(err => {
@@ -331,7 +331,12 @@ bot.on('message', msg => {
                 });
         }
 
+        // Ladrão
+        if (msg.content === "!ladrao") {
+            msg.channel.send(`<@448617496472322058> é mt ladrão mano, não da pra aguentar um cara desses`)
+        }
 
+        // Watson
         if (msg.channel.type === "dm") {
             if (msg.author.id === bot.user?.id) return;
             if (!assistant) return;
