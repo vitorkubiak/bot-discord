@@ -7,7 +7,8 @@
     "node": "12.17.0"
   },
   "scripts": {
-    "dev:server": "ts-node-dev --inspect --transpileOnly --ignore-watch node_modules src/bot.ts"
+    "dev:server": "ts-node-dev --inspect --transpileOnly --ignore-watch node_modules src/bot.ts", 
+    "production": "yarn tsc && node ./dist/bot.js"
   },
   "author": "Vitor",
   "license": "ISC",

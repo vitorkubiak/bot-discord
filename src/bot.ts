@@ -9,6 +9,7 @@ import youtube from 'discord-youtube-api';
 import ylist from 'youtube-playlist';
 import AssistantV2 from 'ibm-watson/assistant/v2';
 import { IamAuthenticator } from 'ibm-watson/auth';
+import path from 'path';
 
 var apiyoutube: string | undefined = process.env.apiyoutube;
 var apiibm: string | undefined = process.env.apiibm;
@@ -151,7 +152,7 @@ async function getYoutubePlaylist(msg: Message, link: string) {
 }
 
 async function importCommands(): Promise<string> {
-    const readCSV = fs.createReadStream('./assets/commands.csv');
+    const readCSV = fs.createReadStream(path.resolve(__dirname, "assets", "commands.csv"));
     const parseStream = csvParse({
         from_line: 1,
     });
@@ -180,7 +181,7 @@ function playSound(msg: Message) {
         const connection = msg.member.voice.channel;
 
         connection.join().then(connection => {
-            const dispatcher = connection.play(`./assets/sounds/${file}.mp3`);
+            const dispatcher = connection.play(path.resolve(__dirname, "assets", "sounds", `${file}.mp3`))
             dispatcher.setVolume(0.3);
             dispatcher.on('finish', () => {
                 connection.disconnect();
@@ -192,7 +193,7 @@ function playSound(msg: Message) {
 }
 
 function memes(): string[] {
-    var files = fs.readdirSync("./assets/sounds");
+    var files = fs.readdirSync(path.resolve(__dirname, "assets", "sounds"));
 
     var stringMemes: string[] = [];
 
@@ -341,7 +342,6 @@ bot.on('message', msg => {
             if (msg.author.id === bot.user?.id) return;
             if (!assistant) return;
             if (!apiIbmSession) return;
-            // "1419de93-b881-4086-9480-00e6727304ef"
             assistant.message({
                 assistantId: (assistantidibm ? assistantidibm : ""),
                 sessionId: apiIbmSession,
@@ -363,12 +363,13 @@ bot.on('message', msg => {
         }  
 
         if (msg.content === "!nao consigo") {
-            msg.reply("Não desista gurizão, tenta de novo e meta ficha")
+            msg.reply("Não desista gurizão, tenta de novo e meta ficha");
         }
 
     } catch (err) {
-        msg.reply('Rolou um erro gurizao, tenta de novo e meta ficha')
-        fs.appendFile("./log.csv", `Um novo erro ocorreu piazada:\nData: ${new Date()}\nConteúdo: ${err}\n\n`, () => { });
+        msg.reply('Rolou um erro gurizao, tenta de novo e meta ficha');
+        console.log(err)
+        fs.appendFile(path.resolve(__dirname, "config", "log.csv"), `Um novo erro ocorreu piazada:\nData: ${new Date()}\nConteúdo: ${err}\n\n`, () => { });
     }
 
 });
