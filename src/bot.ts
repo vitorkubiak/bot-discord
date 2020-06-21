@@ -96,6 +96,9 @@ async function handleYoutube(msg: Message, check = false): Promise<any> {
 
     if (link === "next") {
         filaMusicas.shift();
+        var currentMusic = filaMusicas[0]
+        currentMusic = currentMusic.split("=")[1]
+        msg.channel.send('Próxima música: https://www.youtube.com/watch?v=' + currentMusic);
         if(filaMusicas.length === 0){
             if (msg.member?.voice.channel) {
                 if (msg.member?.voice.channel?.members.map(guildMember => guildMember.user.username === 'Botzera')) {
