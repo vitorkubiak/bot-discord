@@ -57,6 +57,7 @@ var discord_youtube_api_1 = __importDefault(require("discord-youtube-api"));
 var youtube_playlist_1 = __importDefault(require("youtube-playlist"));
 var v2_1 = __importDefault(require("ibm-watson/assistant/v2"));
 var auth_1 = require("ibm-watson/auth");
+var path_1 = __importDefault(require("path"));
 var apiyoutube = process.env.apiyoutube;
 var apiibm = process.env.apiibm;
 var urlapiibm = process.env.urlapiibm;
@@ -97,7 +98,7 @@ function handleYoutube(msg, check) {
     var _a, _b, _c, _d;
     if (check === void 0) { check = false; }
     return __awaiter(this, void 0, void 0, function () {
-        var splitYoutube, link, nomeVideo, stringVideo, video, linkVideo, linkPlaylist, links, connection, connection;
+        var splitYoutube, link, nomeVideo, stringVideo, video, linkVideo, linkPlaylist, links, currentMusic, connection, connection;
         return __generator(this, function (_e) {
             switch (_e.label) {
                 case 0:
@@ -133,6 +134,9 @@ function handleYoutube(msg, check) {
                 case 4:
                     if (link === "next") {
                         filaMusicas.shift();
+                        currentMusic = filaMusicas[0];
+                        currentMusic = currentMusic.split("=")[1];
+                        msg.channel.send('Próxima música: https://www.youtube.com/watch?v=' + currentMusic);
                         if (filaMusicas.length === 0) {
                             if ((_a = msg.member) === null || _a === void 0 ? void 0 : _a.voice.channel) {
                                 if ((_c = (_b = msg.member) === null || _b === void 0 ? void 0 : _b.voice.channel) === null || _c === void 0 ? void 0 : _c.members.map(function (guildMember) { return guildMember.user.username === 'Botzera'; })) {
@@ -202,7 +206,7 @@ function importCommands() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    readCSV = fs_1.default.createReadStream('./assets/commands.csv');
+                    readCSV = fs_1.default.createReadStream(path_1.default.resolve(__dirname, "assets", "commands.csv"));
                     parseStream = csv_parse_1.default({
                         from_line: 1,
                     });
@@ -232,7 +236,7 @@ function playSound(msg) {
     if ((_a = msg.member) === null || _a === void 0 ? void 0 : _a.voice.channel) {
         var connection = msg.member.voice.channel;
         connection.join().then(function (connection) {
-            var dispatcher = connection.play(".src/assets/sounds/" + file + ".mp3");
+            var dispatcher = connection.play(path_1.default.resolve(__dirname, "assets", "sounds", file + ".mp3"));
             dispatcher.setVolume(0.3);
             dispatcher.on('finish', function () {
                 connection.disconnect();
@@ -244,7 +248,7 @@ function playSound(msg) {
     }
 }
 function memes() {
-    var files = fs_1.default.readdirSync("./assets/sounds");
+    var files = fs_1.default.readdirSync(path_1.default.resolve(__dirname, "assets", "sounds"));
     var stringMemes = [];
     files.forEach(function (item) {
         var nomes = item.split(".")[0];
@@ -409,7 +413,8 @@ bot.on('message', function (msg) {
     }
     catch (err) {
         msg.reply('Rolou um erro gurizao, tenta de novo e meta ficha');
-        fs_1.default.appendFile("./log.csv", "Um novo erro ocorreu piazada:\nData: " + new Date() + "\nConte\u00FAdo: " + err + "\n\n", function () { });
+        console.log(err);
+        fs_1.default.appendFile(path_1.default.resolve(__dirname, "config", "log.csv"), "Um novo erro ocorreu piazada:\nData: " + new Date() + "\nConte\u00FAdo: " + err + "\n\n", function () { });
     }
 });
 //# sourceMappingURL=bot.js.map
