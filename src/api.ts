@@ -11,4 +11,4 @@ app.get('/', (request: Request, response:Response) => {
     })
 })
 
-app.listen(3333);
+app.listen(process.env.PORT || 5000, () => console.log("🚀 Botzera API tá online gurizao"));
