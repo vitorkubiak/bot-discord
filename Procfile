@@ -1,3 +1,1 @@
-web: yarn tsc
-web: yarn production:api
-web: yarn production:bot
+web: yarn tsc & yarn production:api & yarn production:bot & wait -n
