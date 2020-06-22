@@ -9,7 +9,7 @@
   "scripts": {
     "dev:server": "ts-node-dev --inspect --transpileOnly --ignore-watch node_modules src/bot.ts",
     "production:bot": "yarn tsc && node ./dist/bot.js",
-    "production:api": "yarn tsc && node ./dist/api.js"
+    "production:api": "node ./dist/api.js"
   },
   "author": "Vitor",
   "license": "ISC",
