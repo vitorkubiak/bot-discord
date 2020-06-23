@@ -12,5 +12,5 @@ app.get('/', function (request, response) {
         server: "online"
     });
 });
-app.listen(process.env.PORT || 5000, function () { return console.log("Botzera API tá online gurizao"); });
+app.listen(process.env.PORT || 5000, function () { return console.log("🚀 Botzera API tá online gurizao"); });
 //# sourceMappingURL=api.js.map

@@ -1,4 +1,4 @@
-import Discord, { Message, User, ErrorEvent, DMChannel } from 'discord.js';
+import Discord, { Message, User } from 'discord.js';
 import ytdl from 'ytdl-core';
 import csvParse from 'csv-parse';
 import fs from 'fs';
@@ -155,7 +155,7 @@ async function getYoutubePlaylist(msg: Message, link: string) {
 }
 
 async function importCommands(): Promise<string> {
-    const readCSV = fs.createReadStream(path.resolve(__dirname, "assets", "commands.csv"));
+    const readCSV = fs.createReadStream(path.resolve("src", "assets", "commands.csv"));
     const parseStream = csvParse({
         from_line: 1,
     });
@@ -184,7 +184,7 @@ function playSound(msg: Message) {
         const connection = msg.member.voice.channel;
 
         connection.join().then(connection => {
-            const dispatcher = connection.play(path.resolve(__dirname, "assets", "sounds", `${file}.mp3`))
+            const dispatcher = connection.play(path.resolve("src", "assets", "sounds", `${file}.mp3`))
             dispatcher.setVolume(0.3);
             dispatcher.on('finish', () => {
                 connection.disconnect();
@@ -196,7 +196,7 @@ function playSound(msg: Message) {
 }
 
 function memes(): string[] {
-    var files = fs.readdirSync(path.resolve(__dirname, "assets", "sounds"));
+    var files = fs.readdirSync(path.resolve("src", "assets", "sounds"));
 
     var stringMemes: string[] = [];
 
@@ -372,7 +372,7 @@ bot.on('message', msg => {
     } catch (err) {
         msg.reply('Rolou um erro gurizao, tenta de novo e meta ficha');
         console.log(err)
-        fs.appendFile(path.resolve(__dirname, "config", "log.csv"), `Um novo erro ocorreu piazada:\nData: ${new Date()}\nConteúdo: ${err}\n\n`, () => { });
+        // fs.appendFile(path.resolve(__dirname, "config", "log.csv"), `Um novo erro ocorreu piazada:\nData: ${new Date()}\nConteúdo: ${err}\n\n`, () => { });
     }
 
 });

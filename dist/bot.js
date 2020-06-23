@@ -206,7 +206,7 @@ function importCommands() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    readCSV = fs_1.default.createReadStream(path_1.default.resolve(__dirname, "assets", "commands.csv"));
+                    readCSV = fs_1.default.createReadStream(path_1.default.resolve("src", "assets", "commands.csv"));
                     parseStream = csv_parse_1.default({
                         from_line: 1,
                     });
@@ -236,7 +236,7 @@ function playSound(msg) {
     if ((_a = msg.member) === null || _a === void 0 ? void 0 : _a.voice.channel) {
         var connection = msg.member.voice.channel;
         connection.join().then(function (connection) {
-            var dispatcher = connection.play(path_1.default.resolve(__dirname, "assets", "sounds", file + ".mp3"));
+            var dispatcher = connection.play(path_1.default.resolve("src", "assets", "sounds", file + ".mp3"));
             dispatcher.setVolume(0.3);
             dispatcher.on('finish', function () {
                 connection.disconnect();
@@ -248,7 +248,7 @@ function playSound(msg) {
     }
 }
 function memes() {
-    var files = fs_1.default.readdirSync(path_1.default.resolve(__dirname, "assets", "sounds"));
+    var files = fs_1.default.readdirSync(path_1.default.resolve("src", "assets", "sounds"));
     var stringMemes = [];
     files.forEach(function (item) {
         var nomes = item.split(".")[0];
@@ -414,7 +414,7 @@ bot.on('message', function (msg) {
     catch (err) {
         msg.reply('Rolou um erro gurizao, tenta de novo e meta ficha');
         console.log(err);
-        fs_1.default.appendFile(path_1.default.resolve(__dirname, "config", "log.csv"), "Um novo erro ocorreu piazada:\nData: " + new Date() + "\nConte\u00FAdo: " + err + "\n\n", function () { });
+        // fs.appendFile(path.resolve(__dirname, "config", "log.csv"), `Um novo erro ocorreu piazada:\nData: ${new Date()}\nConteúdo: ${err}\n\n`, () => { });
     }
 });
 //# sourceMappingURL=bot.js.map

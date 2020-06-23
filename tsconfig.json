@@ -1,25 +1,20 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "commonjs",
-    "outDir": "./dist",
-    "noImplicitAny": true,
-    "rootDir": "./src",
-    "allowJs": true,
-    "skipLibCheck": true,
-    "baseUrl": "./src",
-    "esModuleInterop": true,
     "sourceMap": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
+    "allowJs": false,
+    "declaration": true,
     "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "paths": {
-      "*": ["node_modules/*"]
-    }
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitAny": false,
+    "strictNullChecks": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "outDir": "./dist"
   },
-  "include": ["src"],
-  "exclude": ["prettier.config.js"]
+  "exclude": ["node_modules", "node_modules/*"]
 }
