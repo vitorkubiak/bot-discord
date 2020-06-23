@@ -1,2 +1,3 @@
 web: yarn tsc --skipLibCheck
-run: yarn production:api & yarn production:bot & wait -n
+run: yarn production:api & wait -n
+run1: yarn production:bot
