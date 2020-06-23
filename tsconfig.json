@@ -3,7 +3,6 @@
     "target": "es5",
     "sourceMap": true,
     "allowJs": false,
-    "declaration": true,
     "moduleResolution": "node",
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
