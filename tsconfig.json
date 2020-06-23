@@ -13,7 +13,8 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "baseUrl": ".",
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "emitDecoratorMetadata": false
   },
   "exclude": ["node_modules", "node_modules/*"]
 }
