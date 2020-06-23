@@ -1,2 +1,2 @@
-run: yarn production:api & wait -n
-run1: yarn production:bot
+web: yarn production:api
+bot: yarn production:bot
