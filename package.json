@@ -8,8 +8,8 @@
   },
   "scripts": {
     "dev:server": "ts-node-dev --inspect --transpileOnly --ignore-watch node_modules src/bot.ts",
-    "production:bot": "node ./dist/bot.js",
-    "production:api": "node ./dist/api.js"
+    "production:bot": "ts-node src/bot.ts",
+    "production:api": "ts-node src/api.ts"
   },
   "author": "Vitor",
   "license": "ISC",
@@ -29,6 +29,7 @@
     "ffmpeg-static": "^4.2.3",
     "ibm-watson": "5.6.0",
     "js-ffmpeg": "^0.0.26",
+    "ts-node": "^8.10.2",
     "typescript": "^3.9.5",
     "youtube-playlist": "^1.0.3",
     "youtube-search": "^1.1.4",
