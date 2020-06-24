@@ -12,6 +12,7 @@ import Youtube from './actions/Youtube';
 import Atacar from './actions/Atacar';
 
 const bot = new Bot().create();
+const youtube = new Youtube();
 
 bot.on('message', msg => {
   try {
@@ -36,6 +37,7 @@ bot.on('message', msg => {
     // Parar bot
     if (msg.content === '!stop') {
       const stop = new Stop(msg);
+      youtube.ready = true;
       return stop.stop();
     }
 
@@ -46,7 +48,6 @@ bot.on('message', msg => {
 
     // Youtube Play
     if (msg.content.startsWith('!youtube')) {
-      const youtube = new Youtube();
       return youtube.getMusic(msg);
     }
 

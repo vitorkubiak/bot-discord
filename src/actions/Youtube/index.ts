@@ -4,7 +4,7 @@ import ytdl from 'ytdl-core';
 import ylist from 'youtube-playlist';
 
 class Youtube {
-  //   private ready = true;
+  public ready = true;
   private filaMusicas: string[] = [];
   private arrayMessages: Message[] = [];
   private apiyoutube: string | undefined = process.env.apiyoutube;
@@ -36,9 +36,9 @@ class Youtube {
 
       msg.reply(linkVideo);
 
-      // if (!this.ready) {
-      //     return;
-      // }
+      if (!this.ready) {
+        return;
+      }
     }
 
     if (link.length > 50 && !this.arrayMessages.includes(msg)) {
@@ -78,7 +78,7 @@ class Youtube {
           ) {
             const connection = msg.member.voice.channel;
             connection.join().then(connection => {
-              // ready = true
+              this.ready = true;
               this.arrayMessages = [];
               this.filaMusicas = [];
               connection.disconnect();
@@ -89,7 +89,7 @@ class Youtube {
       {
         this.arrayMessages.length > 1 && this.arrayMessages.shift();
       }
-      // this.ready = true;
+      this.ready = true;
       // handleNextMusic(msg);
 
       return this.getMusic(this.arrayMessages[0]);
@@ -97,7 +97,7 @@ class Youtube {
 
     this.arrayMessages.push(msg);
 
-    if (this.filaMusicas.length > 0 && ytdl.validateURL(link)) {
+    if (this.filaMusicas.length > 0 && !this.ready && ytdl.validateURL(link)) {
       this.filaMusicas.push(link);
     } else {
       {
@@ -107,7 +107,7 @@ class Youtube {
           this.filaMusicas.push(link);
       }
       if (msg.member?.voice.channel) {
-        // ready = false;
+        this.ready = false;
         const connection = msg.member.voice.channel;
 
         connection.join().then(connection => {
@@ -118,7 +118,7 @@ class Youtube {
           dispatcher.on('finish', () => {
             this.filaMusicas.shift();
             this.arrayMessages.shift();
-            // ready = true
+            this.ready = true;
             dispatcher.destroy;
             this.getMusic(msg, true);
           });
