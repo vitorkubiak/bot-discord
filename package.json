@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev:server": "ts-node-dev --inspect --transpileOnly --ignore-watch node_modules src/bot.ts",
+    "dev:queue": "ts-node src/queue.ts",
     "production:bot": "ts-node src/bot.ts",
     "production:api": "ts-node src/api.ts"
   },
@@ -16,6 +17,7 @@
     "@types/express": "^4.17.6",
     "@types/ws": "^7.2.5",
     "axios": "^0.19.2",
+    "bull": "^3.14.0",
     "cors": "^2.8.5",
     "csv-parse": "^4.10.1",
     "date-fns": "^2.0.0-beta.5",
@@ -34,6 +36,7 @@
     "ytdl-core-discord": "^1.2.0"
   },
   "devDependencies": {
+    "@types/bull": "^3.14.0",
     "eslint": "^7.2.0",
     "ts-node-dev": "^1.0.0-pre.44"
   }

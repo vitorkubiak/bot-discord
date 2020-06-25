@@ -9,12 +9,14 @@ import Joke from './actions/Joke';
 import Covid from './actions/Covid';
 import Watson from './actions/Watson';
 import Youtube from './actions/Youtube';
+import NewYoutube from './actions/NewYoutube';
 import Atacar from './actions/Atacar';
 
 const bot = new Bot().create();
 const youtube = new Youtube();
+const newYoutube = new NewYoutube();
 
-bot.on('message', msg => {
+bot.on('message', async msg => {
   try {
     // Marcar o bot
     if (msg.content === `<@!${bot.user?.id}>`) {
@@ -49,6 +51,12 @@ bot.on('message', msg => {
     // Youtube Play
     if (msg.content.startsWith('!youtube')) {
       return youtube.getMusic(msg);
+    }
+
+    if (msg.content.startsWith('!yt')) {
+      const input = msg.content.split(' ')[1];
+      await newYoutube.playMusic(input);
+      return newYoutube.getCount();
     }
 
     // Sortear

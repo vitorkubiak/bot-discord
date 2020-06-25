@@ -3,6 +3,7 @@ import youtube from 'discord-youtube-api';
 import ytdl from 'ytdl-core';
 import ylist from 'youtube-playlist';
 
+
 class Youtube {
   public ready = true;
   private filaMusicas: string[] = [];
@@ -20,7 +21,8 @@ class Youtube {
     if (
       !ytdl.validateURL(link) &&
       !this.arrayMessages.includes(msg) &&
-      'next' !== link
+      'next' !== link &&
+      !check
     ) {
       const nomeVideo = splitYoutube.filter(
         (palavra: string) => palavra !== '!youtube',
@@ -41,7 +43,7 @@ class Youtube {
       }
     }
 
-    if (link.length > 50 && !this.arrayMessages.includes(msg)) {
+    if (link.length > 50 && !this.arrayMessages.includes(msg) && !check) {
       const linkPlaylist = msg.content.split(' ')[1];
       let links: string[] = [];
 
