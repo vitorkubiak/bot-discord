@@ -20,7 +20,8 @@ class Youtube {
     if (
       !ytdl.validateURL(link) &&
       !this.arrayMessages.includes(msg) &&
-      'next' !== link
+      'next' !== link &&
+      !check
     ) {
       const nomeVideo = splitYoutube.filter(
         (palavra: string) => palavra !== '!youtube',
@@ -41,7 +42,7 @@ class Youtube {
       }
     }
 
-    if (link.length > 50 && !this.arrayMessages.includes(msg)) {
+    if (link.length > 50 && !this.arrayMessages.includes(msg) && !check) {
       const linkPlaylist = msg.content.split(' ')[1];
       let links: string[] = [];
 

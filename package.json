@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev:server": "ts-node-dev --inspect --transpileOnly --ignore-watch node_modules src/bot.ts",
+    "dev:server": "ts-node-dev --inspect=9300 --transpileOnly --ignore-watch node_modules src/bot.ts",
     "production:bot": "ts-node src/bot.ts",
     "production:api": "ts-node src/api.ts"
   },
@@ -34,6 +34,7 @@
     "ytdl-core-discord": "^1.2.0"
   },
   "devDependencies": {
+    "@types/bull": "^3.14.0",
     "eslint": "^7.2.0",
     "ts-node-dev": "^1.0.0-pre.44"
   }

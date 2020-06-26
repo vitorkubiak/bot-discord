@@ -83,6 +83,13 @@
     "@types/connect" "*"
     "@types/node" "*"
 
+"@types/bull@^3.14.0":
+  version "3.14.0"
+  resolved "https://registry.yarnpkg.com/@types/bull/-/bull-3.14.0.tgz#60741d3f5006bd4e17b02ff036e6ecef7ac47a6e"
+  integrity sha512-9MKWQ4Q+GFIEA3/SdSc128mAccCKni2YVMKPEdQY5qooN+3gl0Po+f7kaKukgn5s6YXj5xbvc/zTaMsHZL9GvA==
+  dependencies:
+    "@types/ioredis" "*"
+
 "@types/color-name@^1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@types/color-name/-/color-name-1.1.1.tgz#1c1261bbeaa10a8055bbc5d8ab84b7b2afc846a0"
@@ -130,6 +137,13 @@
   version "5.2.2"
   resolved "https://registry.yarnpkg.com/@types/file-type/-/file-type-5.2.2.tgz#901cda395f75780c52bbc7a56fd1f5b5bc96f28f"
   integrity sha512-GWtM4fyqfb+bec4ocpo51/y4x0b83Je+iA6eV131LT9wL0//G+1UgwbkMg7w61ceOwR+KkZXK00z44jrrNljWg==
+  dependencies:
+    "@types/node" "*"
+
+"@types/ioredis@*":
+  version "4.16.7"
+  resolved "https://registry.yarnpkg.com/@types/ioredis/-/ioredis-4.16.7.tgz#2620a48c26faeb4b65f2ef7501ed6e515d8a3327"
+  integrity sha512-gc0g0OlBxc/Mlhutv5Njkm3A4m5oZXq8gCeEGOt2c4p4ZIYw9dotYjg6z8nSsxOH9KnKkjWUzg0oGCAqtnGFIg==
   dependencies:
     "@types/node" "*"
 
