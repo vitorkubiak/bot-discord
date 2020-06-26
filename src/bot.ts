@@ -13,6 +13,7 @@ import NewYoutube from './actions/NewYoutube';
 import Atacar from './actions/Atacar';
 
 const bot = new Bot().create();
+
 const youtube = new Youtube();
 const newYoutube = new NewYoutube();
 
@@ -40,6 +41,7 @@ bot.on('message', async msg => {
     if (msg.content === '!stop') {
       const stop = new Stop(msg);
       youtube.ready = true;
+      newYoutube.clearQueue();
       return stop.stop();
     }
 
@@ -53,10 +55,20 @@ bot.on('message', async msg => {
       return youtube.getMusic(msg);
     }
 
+    if (msg.content === '!yt next') {
+      return newYoutube.nextVideo(msg);
+    }
+
+    if (msg.content === '!yt fila') {
+      return newYoutube.getQueueList(msg);
+    }
+
     if (msg.content.startsWith('!yt')) {
-      const input = msg.content.split(' ')[1];
-      await newYoutube.playMusic(input);
-      return newYoutube.getCount();
+      const input = msg.content
+        .split(' ')
+        .filter(i => i !== '!yt')
+        .join(' ');
+      return newYoutube.playMusic(msg, input);
     }
 
     // Sortear

@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev:server": "ts-node-dev --inspect --transpileOnly --ignore-watch node_modules src/bot.ts",
-    "dev:queue": "ts-node src/queue.ts",
+    "dev:server": "ts-node-dev --inspect=9300 --transpileOnly --ignore-watch node_modules src/bot.ts",
+    "dev:queue": "ts-node-dev --inspect=9229 --transpileOnly --ignore-watch node_modules src/queue.ts",
+    "production:queue": "ts-node src/queue.ts",
     "production:bot": "ts-node src/bot.ts",
     "production:api": "ts-node src/api.ts"
   },
