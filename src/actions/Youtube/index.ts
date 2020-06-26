@@ -3,7 +3,6 @@ import youtube from 'discord-youtube-api';
 import ytdl from 'ytdl-core';
 import ylist from 'youtube-playlist';
 
-
 class Youtube {
   public ready = true;
   private filaMusicas: string[] = [];

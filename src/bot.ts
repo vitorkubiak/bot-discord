@@ -41,7 +41,7 @@ bot.on('message', async msg => {
     if (msg.content === '!stop') {
       const stop = new Stop(msg);
       youtube.ready = true;
-      newYoutube.clearQueue();
+      newYoutube.removeAllMusics();
       return stop.stop();
     }
 
@@ -56,11 +56,13 @@ bot.on('message', async msg => {
     }
 
     if (msg.content === '!yt next') {
-      return newYoutube.nextVideo(msg);
+      return newYoutube.skipMusic(msg);
     }
 
     if (msg.content === '!yt fila') {
-      return newYoutube.getQueueList(msg);
+      return newYoutube.handleList().forEach(music => {
+        msg.reply(music.input.link);
+      });
     }
 
     if (msg.content.startsWith('!yt')) {

@@ -1,31 +1,87 @@
 import { Message } from 'discord.js';
 import Ytdl from 'ytdl-core';
-import { Job } from 'bull';
-import Youtube, { Video } from 'discord-youtube-api';
+import Youtube from 'discord-youtube-api';
 import Ylist from 'youtube-playlist';
-import videoQueue from '../../config/queue';
 import PlayListDTO from './dtos/PlayListDTO';
+import QueueRepository from '../../repositories/QueueRepository';
+import youtube from 'discord-youtube-api';
+import ytdl from 'ytdl-core';
+import ylist from 'youtube-playlist';
 
 class NewYoutube {
   private youtubeApi: Youtube;
+  private queue: QueueRepository;
 
   constructor() {
     this.youtubeApi = new Youtube(process.env.apiyoutube || '');
+    this.queue = new QueueRepository();
   }
 
   private isUrl(input: string): boolean {
     return Ytdl.validateURL(input);
   }
 
-  public async nextVideo(msg: Message) {
+  public async skipMusic(msg: Message) {
+    if (this.queue.list().length === 0) return;
     const connection = msg.member?.voice.channel;
     connection?.join().then(connection => {
       connection.disconnect();
     });
   }
 
-  public clearQueue() {
-    return videoQueue.empty();
+  private handleAddMusic(msg: Message, link: string) {
+    this.queue.add({ msg, link });
+    return this.handleNextMusic(msg);
+  }
+
+  private handleRemoveMusic(msg: Message) {
+    this.queue.remove();
+    return this.handleNextMusic(msg);
+  }
+
+  private handleNextMusic(msg: Message) {
+    if (!this.queue.firstIsWorking()) {
+      if (this.queue.first()) {
+        this.queue.first().working = true;
+        return this.handleMusic(msg);
+      }
+    }
+  }
+
+  public handleList() {
+    return this.queue.list();
+  }
+
+  private handleMusic(msg: Message) {
+    if (msg.member?.voice.channel) {
+      const connection = msg.member.voice.channel;
+
+      connection.join().then(connection => {
+        const dispatcher = connection.play(
+          ytdl(this.queue.first().input.link, { filter: 'audioonly' }),
+        );
+        dispatcher.setVolume(0.3);
+        dispatcher.on('finish', () => {
+          dispatcher.destroy;
+          this.handleRemoveMusic(msg);
+
+          if (!this.queue.first()) {
+            connection.disconnect();
+          }
+        });
+
+        dispatcher.on('close', () => {
+          dispatcher.destroy;
+          this.handleRemoveMusic(msg);
+
+          if (!this.queue.first()) {
+            connection.disconnect();
+          }
+        });
+      });
+    } else {
+      msg.reply('Você precisa estar em um canal!');
+    }
   }
 
   private async getUrl(input: string): Promise<string> {
@@ -33,25 +89,8 @@ class NewYoutube {
     return `https://www.youtube.com/watch?v=${video.id}`;
   }
 
-  public async getQueueList(msg: Message) {
-    msg.reply(`A fila tem ${await videoQueue.count()} vídeos pela frente`);
-
-    const jobs: Job[] = await videoQueue.getJobs(['waiting']);
-
-    if (jobs.length === 0) {
-      return msg.reply('Nada na fila.');
-    }
-
-    const youtubeTitles: string[] = [];
-
-    jobs.forEach(async job => {
-      // const video = await this.youtubeApi.getVideo(
-      //   'https://www.youtube.com/watch?v=5NPBIwQyPWE',
-      // );
-      return youtubeTitles.push(`${job.data.link}\n`);
-    });
-
-    return msg.channel.send(youtubeTitles);
+  public removeAllMusics() {
+    return this.queue.removeAll();
   }
 
   private isPlaylist(link: string) {
@@ -59,42 +98,23 @@ class NewYoutube {
   }
 
   public async playMusic(msg: Message, input: string) {
-    if (!msg.member?.voice.channel)
-      return msg.reply('Você precisa estar em um canal!');
-
     if (this.isUrl(input)) {
       if (this.isPlaylist(input)) {
         // adicionar todas as musicas dentro da fila
         await Ylist(input, 'url').then((response: PlayListDTO) => {
           return response.data.playlist.map((musicUrl: string) => {
-            return videoQueue.add('video transcoding', {
-              link: musicUrl,
-              guildId: msg.guild?.id,
-              requesterId: msg.author.id,
-            });
+            this.handleAddMusic(msg, musicUrl);
           });
         });
         return;
       }
-      // adicionar link dentro da fila
-      // return videoQueue.add('video transcoding', {
-      //   message: msg,
-      //   link: input,
-      // });
-      return videoQueue.add('video transcoding', {
-        link: input,
-        guildId: msg.guild?.id,
-        requesterId: msg.author.id,
-      });
+
+      return this.handleAddMusic(msg, input);
     }
     // return getUrl(input); pegar a url e adicionar na fila
     this.getUrl(input)
       .then(link => {
-        return videoQueue.add('video transcoding', {
-          link,
-          guildId: msg.guild?.id,
-          requesterId: msg.author.id,
-        });
+        return this.handleAddMusic(msg, link);
       })
       .catch(err => {
         return msg.reply(
