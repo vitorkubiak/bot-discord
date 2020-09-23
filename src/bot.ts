@@ -65,6 +65,10 @@ bot.on('message', async msg => {
       });
     }
 
+    if (msg.content === '!pt') {
+      return msg.reply('https://i.makeagif.com/media/6-04-2019/G9fkUb.gif')
+    }
+
     if (msg.content.startsWith('!yt')) {
       const input = msg.content
         .split(' ')
